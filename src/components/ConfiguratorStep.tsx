@@ -1,3 +1,4 @@
+/*src/components/ConfiguratorStep.tsx*/
 'use client';
 
 import React from 'react';
@@ -9,45 +10,165 @@ interface ConfiguratorStepProps {
   step: number;
 }
 
+/* ── Icone SVG leggere ─────────────────────────────────────── */
+const CheckIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+    <path d="M2 7L5.5 10.5L12 3.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const cateringDetails: Record<string, { icon: string; desc: string; price: number }> = {
+  base:    { icon: '◇', desc: 'Buffet semplice, bevande incluse',       price: 15 },
+  medio:   { icon: '◈', desc: 'Menù curato, vini selezionati',          price: 25 },
+  premium: { icon: '◆', desc: 'Chef privato, servizio al tavolo',       price: 40 },
+};
+
+const extraServices = [
+  {
+    key: 'fotografo' as keyof EventConfig,
+    title: 'Fotografo professionista',
+    desc: 'Reportage completo della serata',
+    price: '€ 200',
+  },
+  {
+    key: 'allestimento' as keyof EventConfig,
+    title: 'Allestimento floreale',
+    desc: 'Composizioni su misura per il tuo evento',
+    price: '€ 250',
+  },
+];
+
+/* ── Intestazione step riutilizzabile ──────────────────────── */
+function StepHeader({ label, title }: { label: string; title: string }) {
+  return (
+    <div className="mb-8">
+      <p
+        className="text-xs uppercase mb-2"
+        style={{ color: 'var(--gold)', letterSpacing: '0.22em', fontWeight: 500 }}
+      >
+        {label}
+      </p>
+      <h2
+        className="font-display"
+        style={{ fontSize: 'clamp(1.5rem, 4vw, 2rem)', fontWeight: 600, color: 'var(--dark)', lineHeight: 1.2 }}
+      >
+        {title}
+      </h2>
+      <div className="divider-gold mt-4" />
+    </div>
+  );
+}
+
+/* ── Card di selezione generica ────────────────────────────── */
+function SelectCard({
+  selected,
+  onClick,
+  children,
+  className = '',
+}: {
+  selected: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={`w-full text-left rounded-xl transition-all duration-200 ${className}`}
+      style={{
+        border: selected
+          ? '1.5px solid var(--gold)'
+          : '1.5px solid rgba(201,162,74,0.22)',
+        background: selected
+          ? 'linear-gradient(135deg, rgba(201,162,74,0.08) 0%, rgba(201,162,74,0.04) 100%)'
+          : 'var(--cream)',
+        boxShadow: selected ? '0 4px 20px rgba(201,162,74,0.15)' : 'none',
+        transform: selected ? 'translateY(-1px)' : 'translateY(0)',
+      }}
+    >
+      {children}
+    </button>
+  );
+}
+
 export function ConfiguratorStep({ config, setConfig, step }: ConfiguratorStepProps) {
   const updateConfig = (updates: Partial<EventConfig>) => {
     setConfig({ ...config, ...updates });
   };
 
   switch (step) {
-    // Step 1: Tipo evento
+
+    /* ── Step 1: Tipo evento ── */
     case 1:
       return (
-        <div className="space-y-4">
-          <h2 className="text-3xl font-display font-bold text-dark mb-6">
-            Che tipo di evento stai organizzando?
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {EVENT_TYPES.map(type => (
-              <button
-                key={type}
-                onClick={() => updateConfig({ tipo_evento: type })}
-                className={`p-4 border-2 rounded-lg font-medium transition ${
-                  config.tipo_evento === type
-                    ? 'border-gold bg-gold/10 text-gold'
-                    : 'border-gold/30 text-dark hover:border-gold'
-                }`}
-              >
-                {type}
-              </button>
-            ))}
+        <div>
+          <StepHeader label="Passo 1 di 6" title="Che tipo di evento stai organizzando?" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {EVENT_TYPES.map(type => {
+              const selected = config.tipo_evento === type;
+              return (
+                <SelectCard key={type} selected={selected} onClick={() => updateConfig({ tipo_evento: type })}>
+                  <div className="flex items-center justify-between px-5 py-4">
+                    <span
+                      className="font-medium"
+                      style={{ color: selected ? 'var(--gold-dark)' : 'var(--dark)', fontSize: '0.9375rem' }}
+                    >
+                      {type}
+                    </span>
+                    <div
+                      className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-200"
+                      style={{
+                        border: selected ? '1.5px solid var(--gold)' : '1.5px solid rgba(201,162,74,0.3)',
+                        background: selected ? 'var(--gold)' : 'transparent',
+                        color: 'white',
+                      }}
+                    >
+                      {selected && <CheckIcon />}
+                    </div>
+                  </div>
+                </SelectCard>
+              );
+            })}
           </div>
         </div>
       );
 
-    // Step 2: Numero persone
+    /* ── Step 2: Numero persone ── */
     case 2:
       return (
-        <div className="space-y-6">
-          <h2 className="text-3xl font-display font-bold text-dark">
-            Quante persone parteciperanno?
-          </h2>
-          <div className="space-y-4">
+        <div>
+          <StepHeader label="Passo 2 di 6" title="Quante persone parteciperanno?" />
+
+          {/* Display numero */}
+          <div
+            className="rounded-xl p-8 mb-6 text-center"
+            style={{
+              background: 'linear-gradient(135deg, rgba(201,162,74,0.07) 0%, rgba(47,74,90,0.04) 100%)',
+              border: '1px solid rgba(201,162,74,0.18)',
+            }}
+          >
+            <span
+              className="font-display"
+              style={{
+                fontSize: 'clamp(4rem, 10vw, 6rem)',
+                fontWeight: 300,
+                color: 'var(--gold)',
+                lineHeight: 1,
+                fontStyle: 'italic',
+              }}
+            >
+              {config.num_persone}
+            </span>
+            <p
+              className="mt-2 text-sm uppercase tracking-widest"
+              style={{ color: 'rgba(43,43,43,0.45)', letterSpacing: '0.18em' }}
+            >
+              ospiti
+            </p>
+          </div>
+
+          {/* Slider */}
+          <div className="mb-6 px-1">
             <input
               type="range"
               min="10"
@@ -55,153 +176,287 @@ export function ConfiguratorStep({ config, setConfig, step }: ConfiguratorStepPr
               step="10"
               value={config.num_persone}
               onChange={e => updateConfig({ num_persone: parseInt(e.target.value) })}
-              className="w-full h-3 bg-gold/20 rounded-lg appearance-none cursor-pointer"
+              style={{
+                '--range-progress': `${((config.num_persone - 10) / 490) * 100}%`,
+              } as React.CSSProperties}
             />
-            <div className="text-center">
-              <span className="text-5xl font-display font-bold text-gold">
-                {config.num_persone}
-              </span>
-              <p className="text-dark/60 mt-2">persone</p>
+            <div
+              className="flex justify-between mt-2 text-xs"
+              style={{ color: 'rgba(43,43,43,0.35)', fontWeight: 300 }}
+            >
+              <span>10</span>
+              <span>500</span>
             </div>
-            <div className="flex gap-2 justify-center">
-              {[25, 50, 100, 200].map(val => (
-                <button
-                  key={val}
-                  onClick={() => updateConfig({ num_persone: val })}
-                  className="px-4 py-2 border border-gold/30 text-sm font-medium text-dark hover:border-gold hover:bg-gold/5 rounded-lg transition"
-                >
-                  {val}
-                </button>
-              ))}
-            </div>
+          </div>
+
+          {/* Quick select */}
+          <div className="flex gap-2 flex-wrap">
+            {[25, 50, 100, 150, 200, 300].map(val => (
+              <button
+                key={val}
+                onClick={() => updateConfig({ num_persone: val })}
+                className="transition-all duration-150"
+                style={{
+                  padding: '6px 16px',
+                  borderRadius: '99px',
+                  border: config.num_persone === val
+                    ? '1.5px solid var(--gold)'
+                    : '1.5px solid rgba(201,162,74,0.25)',
+                  background: config.num_persone === val ? 'var(--gold-subtle)' : 'transparent',
+                  color: config.num_persone === val ? 'var(--gold-dark)' : 'rgba(43,43,43,0.6)',
+                  fontSize: '0.8125rem',
+                  fontWeight: 500,
+                }}
+              >
+                {val}
+              </button>
+            ))}
           </div>
         </div>
       );
 
-    // Step 3: Location
+    /* ── Step 3: Location ── */
     case 3:
       return (
-        <div className="space-y-4">
-          <h2 className="text-3xl font-display font-bold text-dark mb-6">
-            Dove vuoi organizzare l'evento?
-          </h2>
+        <div>
+          <StepHeader label="Passo 3 di 6" title="Dove vuoi organizzare l'evento?" />
           <div className="space-y-3">
-            {LOCATIONS.map(loc => (
-              <button
-                key={loc.value}
-                onClick={() => updateConfig({ location: loc.value })}
-                className={`w-full p-4 border-2 rounded-lg text-left transition ${
-                  config.location === loc.value
-                    ? 'border-gold bg-gold/10'
-                    : 'border-gold/30 hover:border-gold'
-                }`}
-              >
-                <div className="flex justify-between items-center">
-                  <span className="font-medium text-dark">{loc.name}</span>
-                  <span className="text-gold font-bold">€{loc.price}</span>
-                </div>
-              </button>
-            ))}
+            {LOCATIONS.map(loc => {
+              const selected = config.location === loc.value;
+              return (
+                <SelectCard key={loc.value} selected={selected} onClick={() => updateConfig({ location: loc.value })}>
+                  <div className="flex items-center justify-between px-5 py-4">
+                    <div className="flex items-center gap-3">
+                      <div
+                        className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-200"
+                        style={{
+                          border: selected ? '1.5px solid var(--gold)' : '1.5px solid rgba(201,162,74,0.3)',
+                          background: selected ? 'var(--gold)' : 'transparent',
+                          color: 'white',
+                        }}
+                      >
+                        {selected && <CheckIcon />}
+                      </div>
+                      <span
+                        className="font-medium"
+                        style={{ color: selected ? 'var(--gold-dark)' : 'var(--dark)', fontSize: '0.9375rem' }}
+                      >
+                        {loc.name}
+                      </span>
+                    </div>
+                    <span
+                      className="font-display"
+                      style={{
+                        color: selected ? 'var(--gold)' : 'rgba(43,43,43,0.45)',
+                        fontSize: '1rem',
+                        fontWeight: 600,
+                        letterSpacing: '-0.01em',
+                      }}
+                    >
+                      € {loc.price.toLocaleString('it-IT')}
+                    </span>
+                  </div>
+                </SelectCard>
+              );
+            })}
           </div>
         </div>
       );
 
-    // Step 4: Catering
+    /* ── Step 4: Catering ── */
     case 4:
       return (
-        <div className="space-y-4">
-          <h2 className="text-3xl font-display font-bold text-dark mb-6">
-            Quale catering preferisci?
-          </h2>
+        <div>
+          <StepHeader label="Passo 4 di 6" title="Quale catering preferisci?" />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {['base', 'medio', 'premium'].map(level => (
-              <button
-                key={level}
-                onClick={() => updateConfig({ catering: level as any })}
-                className={`p-6 border-2 rounded-lg text-center transition ${
-                  config.catering === level
-                    ? 'border-gold bg-gold/10'
-                    : 'border-gold/30 hover:border-gold'
-                }`}
-              >
-                <p className="font-display font-bold text-lg text-dark capitalize mb-2">
-                  {level}
-                </p>
-                <p className="text-sm text-dark/60">
-                  €{level === 'base' ? 15 : level === 'medio' ? 25 : 40}
-                </p>
-                <p className="text-xs text-dark/40 mt-2">a persona</p>
-              </button>
-            ))}
+            {(['base', 'medio', 'premium'] as const).map(level => {
+              const selected = config.catering === level;
+              const details = cateringDetails[level];
+              return (
+                <SelectCard key={level} selected={selected} onClick={() => updateConfig({ catering: level })}>
+                  <div className="p-6 text-center">
+                    {/* Selezione indicator */}
+                    <div
+                      className="w-6 h-6 rounded-full flex items-center justify-center mx-auto mb-4 transition-all duration-200"
+                      style={{
+                        border: selected ? '1.5px solid var(--gold)' : '1.5px solid rgba(201,162,74,0.25)',
+                        background: selected ? 'var(--gold)' : 'transparent',
+                        color: 'white',
+                      }}
+                    >
+                      {selected && <CheckIcon />}
+                    </div>
+
+                    <p
+                      className="font-display capitalize mb-1"
+                      style={{
+                        fontSize: '1.25rem',
+                        fontWeight: 600,
+                        color: selected ? 'var(--gold-dark)' : 'var(--dark)',
+                      }}
+                    >
+                      {level}
+                    </p>
+
+                    <p
+                      className="text-xs mb-4"
+                      style={{ color: 'rgba(43,43,43,0.5)', fontWeight: 300, lineHeight: 1.5 }}
+                    >
+                      {details.desc}
+                    </p>
+
+                    <div
+                      className="font-display"
+                      style={{
+                        fontSize: '1.5rem',
+                        fontWeight: 600,
+                        color: selected ? 'var(--gold)' : 'rgba(43,43,43,0.4)',
+                      }}
+                    >
+                      € {details.price}
+                    </div>
+                    <p className="text-xs mt-1" style={{ color: 'rgba(43,43,43,0.35)', letterSpacing: '0.06em' }}>
+                      A PERSONA
+                    </p>
+                  </div>
+                </SelectCard>
+              );
+            })}
           </div>
         </div>
       );
 
-    // Step 5: DJ
+    /* ── Step 5: DJ ── */
     case 5:
       return (
-        <div className="space-y-4">
-          <h2 className="text-3xl font-display font-bold text-dark mb-6">
-            Vuoi un DJ?
-          </h2>
-          <div className="grid grid-cols-2 gap-4">
-            <button
-              onClick={() => updateConfig({ dj: true })}
-              className={`p-6 border-2 rounded-lg font-medium transition ${
-                config.dj
-                  ? 'border-gold bg-gold/10 text-gold'
-                  : 'border-gold/30 text-dark hover:border-gold'
-              }`}
-            >
-              Sì, +€400
-            </button>
-            <button
-              onClick={() => updateConfig({ dj: false })}
-              className={`p-6 border-2 rounded-lg font-medium transition ${
-                !config.dj
-                  ? 'border-gold bg-gold/10 text-gold'
-                  : 'border-gold/30 text-dark hover:border-gold'
-              }`}
-            >
-              No, grazie
-            </button>
+        <div>
+          <StepHeader label="Passo 5 di 6" title="Vuoi un DJ per la serata?" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* Sì */}
+            <SelectCard selected={config.dj} onClick={() => updateConfig({ dj: true })}>
+              <div className="p-7 text-center">
+                <div
+                  className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4"
+                  style={{
+                    background: config.dj ? 'linear-gradient(135deg, var(--gold), var(--gold-dark))' : 'rgba(201,162,74,0.1)',
+                    transition: 'background 0.2s ease',
+                  }}
+                >
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <circle cx="10" cy="10" r="4" stroke={config.dj ? 'white' : 'var(--gold)'} strokeWidth="1.5"/>
+                    <circle cx="10" cy="10" r="8" stroke={config.dj ? 'white' : 'var(--gold)'} strokeWidth="1" strokeDasharray="3 2"/>
+                  </svg>
+                </div>
+                <p className="font-display font-semibold mb-1" style={{ color: config.dj ? 'var(--gold-dark)' : 'var(--dark)', fontSize: '1.1rem' }}>
+                  Sì, aggiungi DJ
+                </p>
+                <p className="text-sm" style={{ color: 'rgba(43,43,43,0.5)', fontWeight: 300 }}>
+                  + € 400
+                </p>
+              </div>
+            </SelectCard>
+
+            {/* No */}
+            <SelectCard selected={!config.dj} onClick={() => updateConfig({ dj: false })}>
+              <div className="p-7 text-center">
+                <div
+                  className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4"
+                  style={{
+                    background: !config.dj ? 'rgba(47,74,90,0.12)' : 'rgba(201,162,74,0.06)',
+                    transition: 'background 0.2s ease',
+                  }}
+                >
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path d="M6 10h8" stroke={!config.dj ? 'var(--blue)' : 'rgba(43,43,43,0.3)'} strokeWidth="1.5" strokeLinecap="round"/>
+                  </svg>
+                </div>
+                <p
+                  className="font-display font-semibold mb-1"
+                  style={{ color: !config.dj ? 'var(--blue)' : 'rgba(43,43,43,0.5)', fontSize: '1.1rem' }}
+                >
+                  No, grazie
+                </p>
+                <p className="text-sm" style={{ color: 'rgba(43,43,43,0.35)', fontWeight: 300 }}>
+                  Musica in sottofondo
+                </p>
+              </div>
+            </SelectCard>
           </div>
         </div>
       );
 
-    // Step 6: Extra
+    /* ── Step 6: Extra ── */
     case 6:
       return (
-        <div className="space-y-4">
-          <h2 className="text-3xl font-display font-bold text-dark mb-6">
-            Servizi aggiuntivi
-          </h2>
-          <div className="space-y-3">
-            <label className="flex items-center p-4 border-2 border-gold/30 hover:border-gold rounded-lg cursor-pointer transition">
-              <input
-                type="checkbox"
-                checked={config.fotografo}
-                onChange={e => updateConfig({ fotografo: e.target.checked })}
-                className="w-5 h-5 accent-gold rounded"
-              />
-              <div className="ml-4">
-                <p className="font-medium text-dark">Fotografo</p>
-                <p className="text-sm text-dark/60">€200</p>
-              </div>
-            </label>
+        <div>
+          <StepHeader label="Passo 6 di 6" title="Servizi aggiuntivi" />
+          <p className="mb-6 text-sm" style={{ color: 'rgba(43,43,43,0.5)', fontWeight: 300 }}>
+            Aggiungi i servizi che rendono il tuo evento indimenticabile.
+          </p>
+          <div className="space-y-4">
+            {extraServices.map(service => {
+              const checked = config[service.key] as boolean;
+              return (
+                <button
+                  key={service.key}
+                  onClick={() => updateConfig({ [service.key]: !checked })}
+                  className="w-full text-left transition-all duration-200"
+                  style={{
+                    border: checked
+                      ? '1.5px solid var(--gold)'
+                      : '1.5px solid rgba(201,162,74,0.22)',
+                    background: checked
+                      ? 'linear-gradient(135deg, rgba(201,162,74,0.07) 0%, rgba(201,162,74,0.03) 100%)'
+                      : 'var(--cream)',
+                    borderRadius: '12px',
+                    boxShadow: checked ? '0 4px 20px rgba(201,162,74,0.12)' : 'none',
+                    transform: checked ? 'translateY(-1px)' : 'translateY(0)',
+                  }}
+                >
+                  <div className="flex items-center gap-4 px-5 py-4">
+                    {/* Checkbox custom */}
+                    <div
+                      className="w-5 h-5 rounded flex items-center justify-center flex-shrink-0 transition-all duration-200"
+                      style={{
+                        border: checked ? '1.5px solid var(--gold)' : '1.5px solid rgba(201,162,74,0.3)',
+                        background: checked ? 'var(--gold)' : 'transparent',
+                        color: 'white',
+                        borderRadius: '5px',
+                      }}
+                    >
+                      {checked && <CheckIcon />}
+                    </div>
 
-            <label className="flex items-center p-4 border-2 border-gold/30 hover:border-gold rounded-lg cursor-pointer transition">
-              <input
-                type="checkbox"
-                checked={config.allestimento}
-                onChange={e => updateConfig({ allestimento: e.target.checked })}
-                className="w-5 h-5 accent-gold rounded"
-              />
-              <div className="ml-4">
-                <p className="font-medium text-dark">Allestimento floreale</p>
-                <p className="text-sm text-dark/60">€250</p>
-              </div>
-            </label>
+                    <div className="flex-1 min-w-0">
+                      <p
+                        className="font-medium"
+                        style={{
+                          color: checked ? 'var(--gold-dark)' : 'var(--dark)',
+                          fontSize: '0.9375rem',
+                        }}
+                      >
+                        {service.title}
+                      </p>
+                      <p className="text-xs mt-0.5" style={{ color: 'rgba(43,43,43,0.45)', fontWeight: 300 }}>
+                        {service.desc}
+                      </p>
+                    </div>
+
+                    <span
+                      className="font-display flex-shrink-0"
+                      style={{
+                        color: checked ? 'var(--gold)' : 'rgba(43,43,43,0.4)',
+                        fontSize: '1rem',
+                        fontWeight: 600,
+                        letterSpacing: '-0.01em',
+                      }}
+                    >
+                      {service.price}
+                    </span>
+                  </div>
+                </button>
+              );
+            })}
           </div>
         </div>
       );

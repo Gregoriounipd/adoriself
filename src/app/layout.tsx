@@ -6,7 +6,7 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-body' });
 const playfair = Playfair_Display({ subsets: ['latin'], variable: '--font-display' });
 
 export const metadata: Metadata = {
-  title: 'Event Planner - Configura il tuo evento',
+  title: 'Adori Self - Configura il tuo evento',
   description: 'Configura il tuo evento e ricevi una stima budget in pochi minuti',
 };
 
