@@ -1,0 +1,197 @@
+╔══════════════════════════════════════════════════════════════════════╗
+║              EVENT PLANNER MVP - QUICK REFERENCE CARD               ║
+╚══════════════════════════════════════════════════════════════════════╝
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎯 FUNZIONALITÀ CORE
+
+✓ Configuratore 6 step con UI elegante
+✓ Budget real-time (preview fixed bottom)
+✓ Booking form con validazione
+✓ Email automata (Resend)
+✓ Database (Supabase)
+✓ Mobile-first responsive
+✓ Apple-style minimalist design
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📂 FILE STRUCTURE AT A GLANCE
+
+src/
+├── app/
+│   ├── page.tsx ...................... HOME
+│   ├── layout.tsx .................... Root layout
+│   ├── globals.css ................... Global styles
+│   ├── configura-evento/page.tsx ..... MAIN PAGE (Step 1-6 + Booking)
+│   ├── admin/leads/page.tsx .......... Dashboard (optional)
+│   └── api/lead/route.ts ............ POST endpoint
+├── components/
+│   ├── ProgressBar.tsx
+│   ├── ConfiguratorStep.tsx
+│   ├── BudgetPreview.tsx
+│   ├── Summary.tsx
+│   └── BookingForm.tsx
+└── lib/
+    ├── pricing.ts ................... LOGICA PREZZI
+    ├── supabase.ts .................. DB CLIENT
+    ├── email.ts ..................... RESEND EMAIL
+    └── validation.ts ................ VALIDAZIONE
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⚡ COMANDI VELOCI
+
+# Install & run
+npm install
+npm run dev
+
+# Build
+npm run build
+npm start
+
+# Deploy
+vercel
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎨 COLORI
+
+--gold: #C9A24A          (Primary button)
+--gold-light: #E6C97A   (Hover)
+--blue: #2F4A5A         (Accents)
+--dark: #2B2B2B         (Text)
+--beige: #F2E6CF        (Background)
+
+Usa in Tailwind: text-gold, bg-gold, border-gold, etc.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+💰 PRICING MODEL (in src/lib/pricing.ts)
+
+Catering:
+  - base: 15€/persona
+  - medio: 25€/persona
+  - premium: 40€/persona
+
+Services:
+  - dj: 400€
+  - fotografo: 200€
+  - allestimento: 250€
+
+Locations:
+  - economica: 350€
+  - standard: 750€
+  - premium: 1200€
+
+Range: basePrice ± (10% down, 15% up)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔧 CONFIGURAZIONI
+
+ENV VARIABLES (.env.local):
+  NEXT_PUBLIC_SUPABASE_URL
+  NEXT_PUBLIC_SUPABASE_ANON_KEY
+  RESEND_API_KEY
+  NEXT_PUBLIC_COMPANY_EMAIL
+  NEXT_PUBLIC_COMPANY_NAME
+
+PERSONALIZZAZIONI:
+  Prezzi → src/lib/pricing.ts (PRICING object)
+  Tipi evento → src/lib/pricing.ts (EVENT_TYPES array)
+  Colori → tailwind.config.ts (colors object)
+  Email → src/lib/email.ts (templates)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📡 API ROUTE
+
+POST /api/lead
+Request: { ...EventConfig, nome, email, telefono, data_preferita }
+Response: { success: true, data: [...] }
+
+AutoMaticamente:
+  ✓ Valida form
+  ✓ Calcola budget (minPrice - maxPrice)
+  ✓ Salva in Supabase
+  ✓ Invia email interna (company)
+  ✓ Invia email utente (customer)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎯 STEP CONFIGURATORE
+
+Step 1 → Tipo evento (select buttons)
+Step 2 → Numero persone (range slider + quick buttons)
+Step 3 → Location (button group)
+Step 4 → Catering (3 opzioni grid)
+Step 5 → DJ (si/no toggle)
+Step 6 → Extra (checkbox: fotografo, allestimento)
+
+Dopo Step 6:
+  → Form booking (nome, email, telefono, data)
+  → Summary riepilogo
+  → [SUBMIT] CTA
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📊 DATABASE (Supabase)
+
+Table: leads
+├── id (BIGSERIAL)
+├── tipo_evento (VARCHAR)
+├── num_persone (INTEGER)
+├── location (VARCHAR)
+├── catering (VARCHAR)
+├── dj, fotografo, allestimento (BOOLEAN)
+├── budget_min, budget_max (INTEGER)
+├── nome, email, telefono (VARCHAR)
+├── data_preferita (DATE)
+├── created_at, updated_at (TIMESTAMP)
+
+Indici: email, created_at DESC
+RLS: Insert public, Select authenticated
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ BEFORE LAUNCH CHECKLIST
+
+- [ ] Test form da inizio a fine
+- [ ] Test su mobile + desktop
+- [ ] Verifica email arrivano
+- [ ] Verifica lead salvati in Supabase
+- [ ] Verifica prezzi corretti
+- [ ] Verifica testi corretti
+- [ ] Test browser diversi
+- [ ] Setup Vercel env variables
+- [ ] Deploy e test live
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🚀 NEXT STEPS
+
+Phase 1 (MVP) ✓ FATTO
+  - Configuratore evento
+  - Budget stima
+  - Booking call
+  - Email automata
+
+Phase 2 (FUTURE)
+  - Google Calendar integration
+  - Admin dashboard
+  - SMS reminder
+  - Stripe payment (acconto)
+  - WhatsApp integration
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📖 LEGGERE PRIMA
+
+1. README.md (2 min)
+2. SETUP.md (10 min)
+3. STRUTTURA_PROGETTO.md (5 min)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+BUONA FORTUNA! 🎉
