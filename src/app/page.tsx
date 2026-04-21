@@ -346,11 +346,11 @@ export default function Home() {
               className="font-display"
               style={{ fontWeight: 600, color: 'var(--dark)', fontSize: '1rem' }}
             >
-              Event Planner
+              Adori Self
             </span>
           </div>
           <p style={{ color: 'rgba(43,43,43,0.4)', fontSize: '0.875rem', fontWeight: 300 }}>
-            &copy; 2024 Event Planner. Tutti i diritti riservati.
+            &copy; 2026 Powered by Adori Events. @Greg4web Tutti i diritti riservati.
           </p>
         </div>
       </footer>
