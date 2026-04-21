@@ -44,7 +44,7 @@ export default function Home() {
               className="font-display text-xl"
               style={{ fontWeight: 600, color: 'var(--dark)', letterSpacing: '-0.01em' }}
             >
-              Event Planner
+              Adori Self
             </span>
           </div>
 
