@@ -1,45 +1,141 @@
+/* =====================================================================
+   ADORISELF — GLOBALS.CSS
+   =====================================================================
+   Struttura:
+   1. Tailwind directives
+   2. Font import (Cormorant Garamond + DM Sans)
+   3. CSS Variables shadcn (collegate al brand gold/beige)
+   4. CSS Variables brand (gold, beige, blue, ombre)
+   5. Base layer (body, headings, selection)
+   6. Components layer (button, card, badge, divider)
+   7. Utilities layer (font-display, bg-pattern, animazioni)
+   8. Form inputs styling
+   9. Scrollbar custom
+   ===================================================================== */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Font Adoriself */
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap');
 
-:root {
-  --gold: #C9A24A;
-  --gold-light: #E6C97A;
-  --gold-dark: #A07830;
-  --gold-subtle: rgba(201, 162, 74, 0.08);
-  --blue: #2F4A5A;
-  --blue-deep: #1A2E3A;
-  --dark: #2B2B2B;
-  --dark-soft: #3D3D3D;
-  --beige: #F2E6CF;
-  --beige-warm: #EDD9B8;
-  --beige-light: #FAF4EA;
-  --cream: #FFFDF8;
-  --shadow-gold: 0 4px 24px rgba(201, 162, 74, 0.15);
-  --shadow-soft: 0 2px 16px rgba(43, 43, 43, 0.08);
-  --shadow-card: 0 8px 40px rgba(43, 43, 43, 0.10);
-}
-
-/* ── Tipografia ─────────────────────────────────────────────── */
+/* ─────────────────────────────────────────────────────────────────────
+   CSS VARIABLES — TEMA SHADCN MAPPATO AI COLORI BRAND
+   ───────────────────────────────────────────────────────────────────── */
 @layer base {
+  :root {
+    /* === Variabili shadcn (formato HSL come richiesto dalla libreria) === */
+    /* Mappate ai colori del brand Adoriself */
+
+    /* Background = cream (sfondo principale) */
+    --background: 42 85% 98%;       /* #FFFDF8 cream */
+    --foreground: 0 0% 17%;         /* #2B2B2B dark */
+
+    /* Card = cream con bordo sottile gold */
+    --card: 42 85% 98%;
+    --card-foreground: 0 0% 17%;
+
+    /* Popover = cream */
+    --popover: 42 85% 98%;
+    --popover-foreground: 0 0% 17%;
+
+    /* Primary = GOLD (questo è il colore principale dei bottoni shadcn) */
+    --primary: 41 54% 54%;          /* #C9A24A gold */
+    --primary-foreground: 42 85% 98%; /* cream chiaro su gold */
+
+    /* Secondary = beige (bottoni secondari, sezioni) */
+    --secondary: 39 60% 88%;        /* #F2E6CF beige */
+    --secondary-foreground: 0 0% 17%; /* dark su beige */
+
+    /* Muted = beige light (sezioni soft) */
+    --muted: 42 65% 95%;            /* #FAF4EA beige-light */
+    --muted-foreground: 0 0% 35%;   /* #3D3D3D dark-soft */
+
+    /* Accent = gold-light (elementi decorativi) */
+    --accent: 39 65% 88%;           /* #EDD9B8 beige-warm */
+    --accent-foreground: 0 0% 17%;
+
+    /* Destructive = rosso (errori, eliminazioni) */
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 0 0% 98%;
+
+    /* Border = gold sottile */
+    --border: 41 50% 80%;           /* gold molto chiaro per i bordi */
+    --input: 41 50% 80%;
+    --ring: 41 54% 54%;             /* gold pieno per focus rings */
+
+    /* Border radius globale */
+    --radius: 0.625rem;             /* 10px - moderno ma non eccessivo */
+
+    /* === Variabili brand Adoriself (esadecimali, per CSS custom) === */
+    --gold: #C9A24A;
+    --gold-light: #E6C97A;
+    --gold-dark: #A07830;
+    --gold-subtle: rgba(201, 162, 74, 0.08);
+    --blue: #2F4A5A;
+    --blue-deep: #1A2E3A;
+    --dark: #2B2B2B;
+    --dark-soft: #3D3D3D;
+    --beige: #F2E6CF;
+    --beige-warm: #EDD9B8;
+    --beige-light: #FAF4EA;
+    --cream: #FFFDF8;
+
+    /* Ombre brand */
+    --shadow-gold: 0 4px 24px rgba(201, 162, 74, 0.15);
+    --shadow-soft: 0 2px 16px rgba(43, 43, 43, 0.08);
+    --shadow-card: 0 8px 40px rgba(43, 43, 43, 0.10);
+  }
+
+  /* Dark mode (puoi attivarlo dopo se vuoi) */
+  .dark {
+    --background: 0 0% 10%;
+    --foreground: 42 85% 98%;
+    --card: 0 0% 15%;
+    --card-foreground: 42 85% 98%;
+    --popover: 0 0% 15%;
+    --popover-foreground: 42 85% 98%;
+    --primary: 41 65% 65%;
+    --primary-foreground: 0 0% 10%;
+    --secondary: 0 0% 20%;
+    --secondary-foreground: 42 85% 98%;
+    --muted: 0 0% 18%;
+    --muted-foreground: 0 0% 70%;
+    --accent: 0 0% 20%;
+    --accent-foreground: 42 85% 98%;
+    --destructive: 0 65% 45%;
+    --destructive-foreground: 42 85% 98%;
+    --border: 0 0% 25%;
+    --input: 0 0% 25%;
+    --ring: 41 65% 65%;
+  }
+
+  /* ── Reset base ── */
+  * {
+    @apply border-border;
+  }
+
   body {
-    @apply bg-beige text-dark;
+    @apply bg-background text-foreground;
     font-family: 'DM Sans', system-ui, sans-serif;
     font-size: 16px;
     line-height: 1.7;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+
+    /* Pattern noise sottile (effetto carta) */
     background-image:
       url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
   }
 
+  /* ── Tipografia titoli ── */
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Cormorant Garamond', Georgia, serif;
     line-height: 1.15;
     letter-spacing: -0.01em;
     font-weight: 600;
+    color: var(--dark);
   }
 
   h1 { font-size: clamp(2rem, 5vw, 3.5rem); }
@@ -55,21 +151,25 @@
     background-color: rgba(201, 162, 74, 0.25);
     color: var(--dark);
   }
+
+  /* Focus visibile dorato per accessibilità */
+  *:focus-visible {
+    @apply outline-none;
+    box-shadow: 0 0 0 3px rgba(201, 162, 74, 0.25);
+    border-color: var(--gold) !important;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
-/* ── Scrollbar ──────────────────────────────────────────────── */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: var(--beige-light); }
-::-webkit-scrollbar-thumb {
-  background: rgba(201, 162, 74, 0.4);
-  border-radius: 3px;
-}
-::-webkit-scrollbar-thumb:hover { background: var(--gold); }
-
-/* ── Componenti ─────────────────────────────────────────────── */
+/* ─────────────────────────────────────────────────────────────────────
+   COMPONENTS LAYER — Bottoni custom, card, badge
+   ───────────────────────────────────────────────────────────────────── */
 @layer components {
 
-  /* Bottoni */
+  /* ── Bottoni custom (alternativa allo shadcn Button) ── */
   .button-primary {
     @apply relative px-8 py-3 font-medium rounded-lg transition-all duration-300 overflow-hidden;
     background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
@@ -88,7 +188,10 @@
     transition: opacity 0.3s ease;
   }
   .button-primary:hover::after { opacity: 1; }
-  .button-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 32px rgba(201, 162, 74, 0.3); }
+  .button-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 32px rgba(201, 162, 74, 0.3);
+  }
   .button-primary:active { transform: translateY(0); }
   .button-primary span { position: relative; z-index: 1; }
 
@@ -116,26 +219,34 @@
     text-transform: uppercase;
     background: transparent;
   }
-  .button-ghost:hover { color: var(--dark); background: rgba(43, 43, 43, 0.05); }
-  .button-ghost:disabled { opacity: 0.35; cursor: not-allowed; }
+  .button-ghost:hover {
+    color: var(--dark);
+    background: rgba(43, 43, 43, 0.05);
+  }
+  .button-ghost:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
 
-  /* Card */
-  .card {
+  /* ── Card brand (custom, alternativa allo shadcn Card) ── */
+  .brand-card {
     @apply rounded-xl;
     background: var(--cream);
     border: 1px solid rgba(201, 162, 74, 0.2);
     box-shadow: var(--shadow-card);
     transition: box-shadow 0.3s ease, transform 0.3s ease;
   }
-  .card:hover { box-shadow: 0 12px 48px rgba(43, 43, 43, 0.14); }
+  .brand-card:hover {
+    box-shadow: 0 12px 48px rgba(43, 43, 43, 0.14);
+  }
 
-  .card-flat {
+  .brand-card-flat {
     @apply rounded-xl;
     background: var(--cream);
     border: 1px solid rgba(201, 162, 74, 0.18);
   }
 
-  /* Divisore decorativo */
+  /* ── Divider decorativo ── */
   .divider-gold {
     width: 48px;
     height: 2px;
@@ -143,8 +254,8 @@
     border-radius: 1px;
   }
 
-  /* Badge */
-  .badge {
+  /* ── Badge brand ── */
+  .brand-badge {
     @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium;
     background: var(--gold-subtle);
     color: var(--gold-dark);
@@ -154,72 +265,43 @@
   }
 }
 
-/* ── Utilities aggiuntive ───────────────────────────────────── */
+/* ─────────────────────────────────────────────────────────────────────
+   UTILITIES LAYER — Classi helper aggiuntive
+   ───────────────────────────────────────────────────────────────────── */
 @layer utilities {
+
+  /* Font helpers (alternativi a font-display/font-body di Tailwind) */
   .font-display { font-family: 'Cormorant Garamond', Georgia, serif; }
   .font-body { font-family: 'DM Sans', system-ui, sans-serif; }
 
+  /* Color helpers brand */
   .text-gold { color: var(--gold); }
   .text-gold-dark { color: var(--gold-dark); }
   .bg-gold-subtle { background: var(--gold-subtle); }
   .bg-cream { background: var(--cream); }
 
-  /* Animazioni entrata */
-  .animate-fade-up {
-    animation: fadeUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
-  }
-  .animate-fade-in {
-    animation: fadeIn 0.4s ease both;
-  }
-  .animate-scale-in {
-    animation: scaleIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
-  }
-
-  /* Delay utility */
-  .delay-100 { animation-delay: 0.1s; }
-  .delay-200 { animation-delay: 0.2s; }
-  .delay-300 { animation-delay: 0.3s; }
-
-  /* Sfondo beige pattern */
+  /* Pattern beige decorativo */
   .bg-pattern {
     background-color: var(--beige);
     background-image:
       radial-gradient(circle at 20% 80%, rgba(201, 162, 74, 0.06) 0%, transparent 50%),
       radial-gradient(circle at 80% 20%, rgba(47, 74, 90, 0.04) 0%, transparent 50%);
   }
+
+  /* Animation delay utility */
+  .delay-100 { animation-delay: 0.1s; }
+  .delay-200 { animation-delay: 0.2s; }
+  .delay-300 { animation-delay: 0.3s; }
 }
 
-/* ── Keyframes ──────────────────────────────────────────────── */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-@keyframes scaleIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to   { opacity: 1; transform: scale(1); }
-}
-@keyframes shimmer {
-  0%   { background-position: -200% center; }
-  100% { background-position: 200% center; }
-}
-
-/* ── Form inputs ────────────────────────────────────────────── */
-html { scroll-behavior: smooth; }
-
-*:focus-visible {
-  @apply outline-none;
-  box-shadow: 0 0 0 3px rgba(201, 162, 74, 0.25);
-  border-color: var(--gold) !important;
-}
-
+/* ─────────────────────────────────────────────────────────────────────
+   FORM INPUTS — Stile custom dorato
+   ───────────────────────────────────────────────────────────────────── */
 input[type='text'],
 input[type='email'],
 input[type='tel'],
 input[type='date'],
+input[type='number'],
 textarea {
   @apply w-full px-4 py-3 rounded-lg transition-all duration-200;
   background: var(--cream);
@@ -228,17 +310,21 @@ textarea {
   font-size: 0.9375rem;
   color: var(--dark);
 }
+
 input[type='text']:hover,
 input[type='email']:hover,
 input[type='tel']:hover,
 input[type='date']:hover,
+input[type='number']:hover,
 textarea:hover {
   border-color: rgba(201, 162, 74, 0.5);
 }
+
 input[type='text']:focus,
 input[type='email']:focus,
 input[type='tel']:focus,
 input[type='date']:focus,
+input[type='number']:focus,
 textarea:focus {
   outline: none;
   border-color: var(--gold);
@@ -246,7 +332,7 @@ textarea:focus {
   background: #FFFEF9;
 }
 
-/* Range slider */
+/* Range slider personalizzato (per slider catering, drink) */
 input[type='range'] {
   appearance: none;
   -webkit-appearance: none;
@@ -287,3 +373,14 @@ input[type='range']::-moz-range-thumb {
   cursor: pointer;
   box-shadow: 0 2px 8px rgba(201, 162, 74, 0.35);
 }
+
+/* ─────────────────────────────────────────────────────────────────────
+   SCROLLBAR CUSTOM
+   ───────────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--beige-light); }
+::-webkit-scrollbar-thumb {
+  background: rgba(201, 162, 74, 0.4);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--gold); }

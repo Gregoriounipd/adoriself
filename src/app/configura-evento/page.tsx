@@ -174,7 +174,7 @@ export default function ConfiguraEventoPage() {
           <>
             {/* Card step con transizione */}
             <div
-              className="card p-10 mb-8"
+              className=".brand-card p-10 mb-8"
               style={{
                 minHeight: '26rem',
                 opacity: animating ? 0 : 1,
