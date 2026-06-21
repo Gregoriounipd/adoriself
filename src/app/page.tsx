@@ -1,22 +1,22 @@
 // =====================================================================
-// HOMEPAGE — ADORISELF (v2 con hero split foto)
+// HOMEPAGE — ADORISELF (v3 con TabsServizi)
 // =====================================================================
 // Posizione: src/app/page.tsx
 // SOSTITUISCI il file esistente.
 //
-// Cambia: hero ora in 2 colonne (testo sinistra, galleria foto destra).
-// Tutto il resto (selezione città) resta invariato.
+// Aggiunge: TabsServizi sopra l'hero (Evento completo / Allestimento / Bar / Foto)
 // =====================================================================
 
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { SelezioneCitta } from '@/components/homepage/SelezioneCitta';
 import { HeroFoto } from '@/components/homepage/HeroFoto';
+import { TabsServizi } from '@/components/homepage/TabsServizi';
 
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-pattern">
-      {/* ── Header ───────────────────────────────────────────── */}
+      {/* ── Header ─────────────────────────────────────────── */}
       <header
         className="sticky top-0 z-40"
         style={{
@@ -79,10 +79,15 @@ export default function HomePage() {
         </div>
       </header>
 
-      {/* ── Hero (split layout) ──────────────────────────────── */}
-      <section className="max-w-6xl mx-auto px-6 py-16 md:py-24">
+      {/* ── Tabs servizi (sopra l'hero) ───────────────────── */}
+      <section className="max-w-6xl mx-auto px-6 pt-10 md:pt-12 flex justify-center md:justify-start animate-fade-up">
+        <TabsServizi attivo="completo" />
+      </section>
+
+      {/* ── Hero ─────────────────────────────────────────── */}
+      <section className="max-w-6xl mx-auto px-6 py-12 md:py-16">
         <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-10 lg:gap-16 items-center">
-          {/* Colonna sinistra: testo */}
+          {/* Sinistra: testo */}
           <div>
             <div className="flex items-center gap-4 mb-8 animate-fade-up">
               <div className="divider-gold" />
@@ -174,7 +179,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Colonna destra: galleria foto */}
+          {/* Destra: galleria foto */}
           <div className="lg:pl-4">
             <HeroFoto />
           </div>

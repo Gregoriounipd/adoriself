@@ -116,8 +116,8 @@ export default function PrivacyPage() {
             <p>
               Il titolare del trattamento dei dati personali è{' '}
               <strong style={{ color: 'var(--dark)' }}>Adoriself</strong>, con
-              sede in [INSERIRE INDIRIZZO COMPLETO], P.IVA [INSERIRE PIVA],
-              email <a href="mailto:info@adoriself.it" style={{ color: 'var(--gold-dark)' }}>info@adoriself.it</a>.
+              sede in [via giovanni xxiii, 14], P.IVA [05752550284],
+              email <a href="mailto:assistenza.adorievents@gmail.com" style={{ color: 'var(--gold-dark)' }}>assistenza.adorievents@gmail.com</a>.
             </p>
           </section>
 
@@ -214,7 +214,7 @@ export default function PrivacyPage() {
                 href="mailto:info@adoriself.it"
                 style={{ color: 'var(--gold-dark)' }}
               >
-                info@adoriself.it
+                assistenza.adorievents@gmail.com
               </a>.
             </p>
           </section>
