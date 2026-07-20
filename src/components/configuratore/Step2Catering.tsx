@@ -30,18 +30,18 @@ const LIVELLI_INFO: Record<
   { label: string; desc: string; icon: string }
 > = {
   base: {
-    label: 'Base',
+    label: 'Buffet base',
     desc: 'Finger food, buffet semplice, perfetto per eventi rilassati.',
     icon: '🍽️',
   },
   medio: {
-    label: 'Medio',
-    desc: 'Buffet ricco, primi e secondi, ideale per la maggior parte degli eventi.',
+    label: 'Buffet medio',
+    desc: 'Buffet ricco, ideale per la maggior parte degli eventi.',
     icon: '🥂',
   },
   premium: {
-    label: 'Premium',
-    desc: 'Menu degustazione servito al tavolo, esperienza alta cucina.',
+    label: 'Buffet premium',
+    desc: 'Un primo monoporzione più buffet ricco, esperienza alta cucina.',
     icon: '⭐',
   },
 };
